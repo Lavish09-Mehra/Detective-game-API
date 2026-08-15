@@ -174,3 +174,11 @@ All endpoints return JSON.
 - `400` — Bad request / missing fields
 - `404` — Resource not found
 - `500` — Server error
+
+## About
+
+This project is made by **Lavish Mehra**
+
+GitHub: [https://github.com/Lavish09-Mehra](https://github.com/Lavish09-Mehra)
+
+If you like this project, give it a star! &#11088;
