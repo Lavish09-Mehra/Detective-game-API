@@ -52,4 +52,26 @@ susp.get('/case/:id/suspects', async(req, res) => {
     }
 });
 
+susp.delete('/suspect/:id', async(req, res) => {
+    try{
+        const id = req.params.id;
+        const deleted = await Suspect.findByIdAndDelete(id);
+        if(!deleted){
+            return res.status(404).json({
+                message: 'No suspect found with this id..'
+            });
+        }
+        return res.status(200).json({
+            message: 'Suspect deleted successfully',
+            deleted
+        });
+    }
+    catch(err){
+        return res.status(500).json({
+            message: 'oops.. something went wrong',
+            error: err
+        });
+    }
+});
+
 export default susp;

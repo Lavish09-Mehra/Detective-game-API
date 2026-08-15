@@ -37,7 +37,7 @@ catch(err){
 game.get('/cases', async(req, res) => {
     try{
         const findCase = await Case.find().sort({ createdAt: -1 });
-        if(!findCase || findCase.length() === 0){
+        if(!findCase || findCase.length === 0){
             return res.status(404).json({
                 message: 'oops.. No case found'
             });
@@ -115,6 +115,28 @@ game.get('/case-date/:date', async(req, res) => {
         }
         return res.status(200).json({
             caseDate
+        });
+    }
+    catch(err){
+        return res.status(500).json({
+            message: 'Oops.. something went wrong',
+            error: err
+        });
+    }
+});
+
+game.delete('/case/:id', async(req, res) => {
+    try{
+        const id = req.params.id;
+        const deleted = await Case.findByIdAndDelete(id);
+        if(!deleted){
+            return res.status(404).json({
+                message: 'No case found with this id..'
+            });
+        }
+        return res.status(200).json({
+            message: 'Case deleted successfully',
+            deleted
         });
     }
     catch(err){

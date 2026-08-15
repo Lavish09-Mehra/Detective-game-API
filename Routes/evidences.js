@@ -1,4 +1,4 @@
-import { Evidence } from '../models/evidenceSchema.js';
+import { Evidance } from '../models/evidenceSchema.js';
 import express from 'express';
 export const evid = express.Router();
 
@@ -13,8 +13,8 @@ evid.post('/create-evidence/:evidId/caseof', async(req, res) => {
                 message: 'Fill all the field... to create an evidence'
             });
         }
-        const evidCreate = new Evidence({
-            type, title, description, 
+        const evidCreate = new Evidance({
+            caseId, type, title, description, 
             location, discoveredAt, linkedSuspects, importance
         });
         const Evidresults = await evidCreate.save();
@@ -33,7 +33,7 @@ evid.post('/create-evidence/:evidId/caseof', async(req, res) => {
 evid.get('/get-evidence/:caseEvid/caseof', async(req, res) => {
     try{
         const Evidcaseid = req.params.caseEvid;
-        const caseEvidence = await Evidence.find({ caseId: Evidcaseid });
+        const caseEvidence = await Evidance.find({ caseId: Evidcaseid });
         if(caseEvidence.length === 0){
             return res.status(401).json({
                 message: 'No Evidence found for this Case..'
@@ -42,6 +42,28 @@ evid.get('/get-evidence/:caseEvid/caseof', async(req, res) => {
         return res.status(200).json({
             caseEvidence
         })
+    }
+    catch(err){
+        return res.status(500).json({
+            message: 'Oops..something Went Wrong',
+            error: err
+        });
+    }
+});
+
+evid.delete('/evidence/:id', async(req, res) => {
+    try{
+        const id = req.params.id;
+        const deleted = await Evidance.findByIdAndDelete(id);
+        if(!deleted){
+            return res.status(404).json({
+                message: 'No evidence found with this id..'
+            });
+        }
+        return res.status(200).json({
+            message: 'Evidence deleted successfully',
+            deleted
+        });
     }
     catch(err){
         return res.status(500).json({
